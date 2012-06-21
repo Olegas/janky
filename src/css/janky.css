@@ -73,6 +73,21 @@
   height: 35px;
 }
 
+#janky_content .janky_job .janky_progress_holder {
+  position: relative;
+}
+
+#janky_content .janky_job .janky_running_time {
+  height: 35px;
+  position: absolute;
+  top: 0;
+  padding-left: 10px;
+  color: #fff;
+  font-size: 1.8em;
+  overflow: hidden;
+  line-height: 35px;
+}
+
 #janky_content #janky_reds > div{
   background-color: #ff0000;
 }

@@ -36,15 +36,7 @@ function secondsToHms(d) {
 }
 
 var date_sort_desc = function (obj1, obj2) {
-  // This is a comparison function that will result in dates being sorted in
-  // DESCENDING order.
-
-  var date1 = new Date(Date.parse(obj1.last_success));
-  var date2 = new Date(Date.parse(obj2.last_success));
-
-  if (date1 > date2) return -1;
-  if (date1 < date2) return 1;
-  return 0;
+  return -date_sort_asc(obj1, obj2);
 };
 
 var date_sort_asc = function (obj1, obj2) {
@@ -281,7 +273,11 @@ var date_sort_asc = function (obj1, obj2) {
   m_.update_janky_builds = function(build){
     var janky_job = $('div.janky_job[data-job-title="' + build.title.replace(/ /g, '_').replace(/-/g, '_') + '"]');
     if (build.progress){
-      janky_job.append('<meter value="' + build.progress + '" max="100"></meter>');
+      janky_job.append(
+         '<div class="janky_progress_holder">' +
+            '<meter value="' + build.progress + '" max="100"></meter>' +
+            '<div class="janky_running_time">' + build.running_time + '</div>' +
+         '</div>');
     }
   };
 
@@ -298,7 +294,10 @@ var date_sort_asc = function (obj1, obj2) {
           try{
             build = $(this).find('a:first').text();
             progress = $(this).find('td.progress-bar-done').css('width').replace('px', '');
-            running_time = $(this).find('table.progress-bar').attr('title');
+            running_time = $(this).find('table.progress-bar').attr('title') || "";
+
+            if(running_time.indexOf(':') !== -1)
+               running_time = running_time.substr(running_time.lastIndexOf(":") + 1);
 
             m_.janky_build_map[build] = {
               title: build,
